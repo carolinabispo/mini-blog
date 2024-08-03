@@ -5,18 +5,21 @@ import styles from "../home/Home.module.css"
 import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useFecthDocuments } from '../../hooks/useFetchDocuments'
+import PostDetail from '../../components/postsDetail/PostDetail'
 
 
 const Home = () => {
   const [query, setQuery] = useState("")
-  const {documents: posts, loading} =useFecthDocuments("posts")
+  const {documents: posts, loading} = useFecthDocuments("posts")
 
+  const navigate = useNavigate()
 
-
-
- 
   const handleSubmit = (e)=>{
     e.preventDefault()
+
+    if(query){
+      return navigate(`/search?q=${query}`)
+    }
   }
 
 
@@ -30,7 +33,7 @@ const Home = () => {
       <div>
         {loading && <p>Carregando...</p>}
         {posts &&  posts.map((post)=>(
-          <h3>{post.title}</h3>
+          <PostDetail key={post.id} post={post}/>
         ))}
         {posts && posts.length === 0 && (
           <div className={styles.noposts}>
